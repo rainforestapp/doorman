@@ -2,7 +2,7 @@
 express = require 'express'
 
 # Retrieve Twilio object by requiring
-Twilio = require 'twilio'
+console.log Twilio = require 'twilio'
 Twiml = Twilio.TwimlClient
 
 # Instantiate a Twilio client object
@@ -18,8 +18,6 @@ app.get '/', (request, response) =>
 
 # Listen to Twilio
 app.post "/respondToVoiceCall", (request, response) ->
-  
-  console.log request
 
   # Validate that this request really came from Twilio...
   if Twilio.validateExpressRequest(request,'20f65a9da68ec4630c9c43d19baef94e')
@@ -29,13 +27,6 @@ app.post "/respondToVoiceCall", (request, response) ->
     response.send twiml.toString()
   else
     response.send "you are not twilio.  Buzz off."
-
-
-
-
-
-
-
 
 # bind and listen for connection
 app.listen process.env.PORT || 5000

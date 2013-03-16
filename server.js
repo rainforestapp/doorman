@@ -5,7 +5,7 @@
 
   express = require('express');
 
-  Twilio = require('twilio');
+  console.log(Twilio = require('twilio'));
 
   Twiml = Twilio.TwimlClient;
 
@@ -19,7 +19,6 @@
 
   app.post("/respondToVoiceCall", function(request, response) {
     var twiml;
-    console.log(request);
     if (Twilio.validateExpressRequest(request, '20f65a9da68ec4630c9c43d19baef94e')) {
       twiml = new Twilio.TwimlResponse();
       twiml.say("Hi!  Thanks for checking out my app!");
