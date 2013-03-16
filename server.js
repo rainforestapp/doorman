@@ -19,11 +19,14 @@
   });
 
   app.post("/respondToVoiceCall", function(request, response) {
-    console.log(request.body);
+    var twiml;
     if (Twilio.validateExpressRequest(request, '20f65a9da68ec4630c9c43d19baef94e')) {
-      return console.log('valid');
+      twiml = new Twilio.TwimlResponse();
+      twiml.say("Hi!  Thanks for checking out my app!");
+      response.type("text/xml");
+      return response.send(twiml.toString());
     } else {
-      return console.log('invalid');
+      return response.send("you are not twilio.  Buzz off.");
     }
   });
 

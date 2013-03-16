@@ -21,18 +21,14 @@ app.get '/', (request, response) ->
 # Listen to Twilio
 app.post "/respondToVoiceCall", (request, response) ->
 
-    console.log request.body
-
     # Validate that this request really came from Twilio...
     if Twilio.validateExpressRequest(request,'20f65a9da68ec4630c9c43d19baef94e')
-        console.log 'valid'
-        # twiml = new Twilio.TwimlResponse()
-        # twiml.say("Hi!  Thanks for checking out my app!")
-        # response.type "text/xml"
-        # response.send twiml.toString()
+        twiml = new Twilio.TwimlResponse()
+        twiml.say("Hi!  Thanks for checking out my app!")
+        response.type "text/xml"
+        response.send twiml.toString()
     else
-        # response.send "you are not twilio.  Buzz off."
-        console.log 'invalid'
+        response.send "you are not twilio.  Buzz off."
 
 # bind and listen for connection
 app.listen process.env.PORT || 5000
