@@ -11,8 +11,8 @@
     return response.send('Hello World');
   });
 
-  app.listen(3000);
+  app.listen(process.env.PORT || 5000);
 
-  console.log('listening on port 3000');
+  console.log('listening on port erm...');
 
 }).call(this);
