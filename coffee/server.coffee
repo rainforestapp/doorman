@@ -19,6 +19,8 @@ app.get '/', (request, response) =>
 # Listen to Twilio
 app.post "/respondToVoiceCall", (request, response) ->
   
+  console.log request
+
   # Validate that this request really came from Twilio...
   if Twilio.validateExpressRequest(request,'20f65a9da68ec4630c9c43d19baef94e')
     twiml = new Twilio.TwimlResponse()
