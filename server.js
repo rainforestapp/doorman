@@ -43,21 +43,19 @@
   };
 
   actions = function(decision, request, response) {
-    var actionPlugin, _i, _len, _ref, _results;
+    var actionPlugin, _i, _len, _ref;
     response.type("text/xml");
     _ref = config.plugins.actions;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       actionPlugin = _ref[_i];
       if (decision.outcome === true && actionPlugin.runOnTrue === true) {
-        _results.push(actionPlugin.run());
+        console.log(Twilio);
+        actionPlugin.run(request, response);
       } else if (decision.outcome === false && actionPlugin.runOnFalse === true) {
-        _results.push(actionPlugin.run());
-      } else {
-        _results.push(void 0);
+        actionPlugin.run(request, response);
       }
     }
-    return _results;
+    return response.end();
   };
 
   app.listen(process.env.PORT || 5000);

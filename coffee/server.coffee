@@ -22,7 +22,7 @@ app.get '/', (request, response) ->
 app.post "/respondToVoiceCall", (request, response) =>
 
     console.log request.body
-    
+
     # Validate that this request really came from Twilio...
     if Twilio.validateExpressRequest(request,'20f65a9da68ec4630c9c43d19baef94e')
         checkDecisionPlugins(request, response)
@@ -56,12 +56,14 @@ actions = (decision, request, response) =>
     for actionPlugin in config.plugins.actions
 
         if decision.outcome is true and actionPlugin.runOnTrue is true 
-            actionPlugin.run()
+            console.log Twilio
+            actionPlugin.run(request,response)
 
         else if decision.outcome is false and actionPlugin.runOnFalse is true
-            actionPlugin.run()
+            actionPlugin.run(request,response)
 
-# checkDecisionPlugins()
+    response.end()
+
 
 # bind and listen for connection
 app.listen process.env.PORT || 5000
