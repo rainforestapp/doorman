@@ -22,13 +22,19 @@
     return config.plugins[type].push(plugin);
   };
 
+  /* Plugins
+  */
+
+
   loadPlugin('sources', 'getCode');
 
   loadPlugin('decisions', 'alwaysFalse');
 
   loadPlugin('decisions', 'alwaysTrue');
 
-  loadPlugin('actions', 'playMp3');
+  loadPlugin('decisions', 'askForCode');
+
+  loadPlugin('actions', 'playEnterTone');
 
   loadPlugin('actions', 'printToConsole');
 

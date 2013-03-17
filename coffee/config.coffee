@@ -18,11 +18,19 @@ loadPlugin = (type, name) ->
 
     config.plugins[type].push plugin 
 
-
+###############################
+### Plugins
+###############################
+# Sources
 loadPlugin 'sources', 'getCode'
+
+# Decisions
 loadPlugin 'decisions', 'alwaysFalse'
 loadPlugin 'decisions', 'alwaysTrue'
-loadPlugin 'actions', 'playMp3'
+loadPlugin 'decisions', 'askForCode'
+
+# Actions
+loadPlugin 'actions', 'playEnterTone'
 loadPlugin 'actions', 'printToConsole'
 
 

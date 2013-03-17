@@ -20,6 +20,7 @@ main = ->
         # if there is a plugin hash present in the body
         if request.query.pluginHash?
 
+            # get the hash
             hash = request.query.pluginHash
 
             # save in global data object so other functions have access
@@ -43,12 +44,12 @@ main = ->
 
             # execute if it has not already been run
             unless global.data[callSid][decisionPlugin.hash]?.hasRun?
+                
+                # run the decision plugin and pass the result into 'state'
                 state = decisionPlugin.run(callSid, request, response)
 
                 if global.dieNow
                     break
-
-                console.log 'herro decision', decisionPlugin.hash
 
                 # save that it has been run
                 # ...locally

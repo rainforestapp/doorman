@@ -40,7 +40,6 @@
           if (global.dieNow) {
             break;
           }
-          console.log('herro decision', decisionPlugin.hash);
           if (global.data[callSid][decisionPlugin.hash] == null) {
             global.data[callSid][decisionPlugin.hash] = {};
           }

@@ -1,7 +1,7 @@
 Twilio = require 'twilio'
 Plugin = require '../plugin'
 
-class playMp3 extends Plugin
+class playEnterTone extends Plugin
 
     runOnTrue: true
 
@@ -13,4 +13,4 @@ class playMp3 extends Plugin
         response.send twiml.toString()
 
 
-module.exports = playMp3
+module.exports = playEnterTone
