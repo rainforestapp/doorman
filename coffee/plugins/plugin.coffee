@@ -32,12 +32,10 @@ class Plugin
         theSource
 
 
-    getHasRun: (callSid) ->
+    getHasRun: (callSid, callback) ->
         global.redis.hget callSid + '-plugins-hasrun', @hash, (err, response) =>
-            console.log 'response?', response
-            return response
-
-        return
+            console.log 'theres a callback', response?
+            callback(response?)
 
 
     setHasRun: (callSid) =>

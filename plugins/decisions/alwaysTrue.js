@@ -19,14 +19,19 @@
     alwaysTrue.prototype.runOnTrue = true;
 
     alwaysTrue.prototype.run = function(callSid, request, response) {
-      var getcode, returnObj;
+      var getcode,
+        _this = this;
       getcode = this.getSourcePlugin('getCode');
-      if (!getcode.retrieveData(callSid, request, response)) {
-        return;
-      }
-      returnObj = {};
-      returnObj.outcome = true;
-      return returnObj;
+      return getcode.retrieveData(callSid, request, response, function(hasData) {
+        var returnObj;
+        if (hasData != null) {
+          returnObj = {};
+          returnObj.outcome = true;
+          return returnObj;
+        } else {
+
+        }
+      });
     };
 
     return alwaysTrue;

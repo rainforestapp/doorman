@@ -12,7 +12,7 @@
   app = this.express();
 
   main = function() {
-    var actions, checkDecisionPlugins, getParameters, saveParameters;
+    var actions, checkDecisionPlugins, getParameters, runPlugin, saveParameters;
     app.use(_this.express.bodyParser());
     app.get('/', function(request, response) {
       return response.send('Hello World');
@@ -34,22 +34,32 @@
         });
       }
     };
-    checkDecisionPlugins = function(callSid, request, response) {
-      var decision, decisionPlugin, _i, _len, _ref;
-      decisionPlugin = {};
-      _ref = config.plugins.decisions;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        decisionPlugin = _ref[_i];
-        console.log('has run?', decisionPlugin.getHasRun());
-        if (!decisionPlugin.getHasRun) {
-          decision = decisionPlugin.run(callSid, request, response);
-          decisionPlugin.setHasRun();
-        }
-        if (decision.outcome === true) {
-          break;
-        }
+    runPlugin = function(callSid, request, response) {
+      var decision;
+      decision = decisionPlugin.run(callSid, request, response);
+      return decisionPlugin.setHasRun();
+    };
+    checkDecisionPlugins = function(callSid, request, response, i) {
+      var decisionPlugin;
+      if (!i) {
+        i = 0;
       }
-      return actions(callSid, decision, request, response);
+      if (i !== config.plugins.decisions.length) {
+        console.log('checking decision plugin', i);
+        decisionPlugin = config.plugins.decisions[i];
+        return decisionPlugin.getHasRun(callSid, function(callbackResponse) {
+          if (callbackResponse === false) {
+            console.log('callback false', i);
+            return checkDecisionPlugins(callSid, request, response, i + 1);
+          } else {
+            console.log('callback response is true');
+            return actions(callSid, callbackResponse, request, response);
+          }
+        });
+      } else {
+        console.log('the end of the decisionz!');
+        return actions(callSid, false, request, response);
+      }
     };
     actions = function(callSid, decision, request, response) {
       var actionPlugin, _i, _len, _ref, _results;

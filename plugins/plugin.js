@@ -45,11 +45,11 @@
       return theSource;
     };
 
-    Plugin.prototype.getHasRun = function(callSid) {
+    Plugin.prototype.getHasRun = function(callSid, callback) {
       var _this = this;
-      global.redis.hget(callSid + '-plugins-hasrun', this.hash, function(err, response) {
-        console.log('response?', response);
-        return response;
+      return global.redis.hget(callSid + '-plugins-hasrun', this.hash, function(err, response) {
+        console.log('theres a callback', response != null);
+        return callback(response != null);
       });
     };
 

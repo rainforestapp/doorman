@@ -38,29 +38,39 @@ main = =>
                 getParameters(callSid, request.query.pluginHash)
 
 
+    runPlugin = (callSid, request, response) =>
+
+        # run the decision plugin
+        decision = decisionPlugin.run(callSid, request, response)
+
+        # save that this plugin has been run
+        decisionPlugin.setHasRun()
+
+
+
     # check plugins
-    checkDecisionPlugins = (callSid, request, response) =>
+    checkDecisionPlugins = (callSid, request, response, i) =>
 
-        decisionPlugin = {}
+        i = 0 unless i
 
-        # loop over each plugin and run it
-        for decisionPlugin in config.plugins.decisions
+        unless i is config.plugins.decisions.length
+
+            console.log 'checking decision plugin', i
             
-            console.log 'has run?', decisionPlugin.getHasRun()
-            
-            unless decisionPlugin.getHasRun
+            decisionPlugin = config.plugins.decisions[i]
+                
+            decisionPlugin.getHasRun callSid, (callbackResponse) =>
+                if callbackResponse is false
+                    console.log 'callback false', i
+                    checkDecisionPlugins( callSid, request, response, i+1 ) 
+                else
+                    console.log 'callback response is true'
+                    # call actions with the relevant response
+                    actions(callSid, callbackResponse, request, response)
 
-                # run the decision plugin
-                decision = decisionPlugin.run(callSid, request, response)
-
-                # save that this plugin has been run
-                decisionPlugin.setHasRun()
-
-            # if the plugin returns true, stop the loop to call actions
-            break if decision.outcome is true
-
-        # call actions with the relevant response
-        actions(callSid, decision, request, response)
+        else
+            console.log 'the end of the decisionz!'
+            actions(callSid, false, request, response)        
 
 
     # action

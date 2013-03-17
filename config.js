@@ -24,6 +24,8 @@
 
   loadPlugin('sources', 'getCode');
 
+  loadPlugin('decisions', 'alwaysFalse');
+
   loadPlugin('decisions', 'alwaysTrue');
 
   loadPlugin('actions', 'playMp3');

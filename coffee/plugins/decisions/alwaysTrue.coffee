@@ -8,14 +8,15 @@ class alwaysTrue extends Plugin
         # this function will stop execution
         getcode = @getSourcePlugin('getCode')
 
-        unless getcode.retrieveData(callSid, request, response)
-            return
+        getcode.retrieveData callSid, request, response, (hasData) =>
+            if hasData?
+                # otherwise return stuff
+                returnObj = {}
+                returnObj.outcome = true
+                return returnObj
 
-        # otherwise return stuff
-        returnObj = {}
-        returnObj.outcome = true
-
-        returnObj
+            else
+                return
 
 
 module.exports = alwaysTrue
