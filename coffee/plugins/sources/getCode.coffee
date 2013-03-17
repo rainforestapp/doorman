@@ -5,13 +5,14 @@ class getCode extends Plugin
 
     runOnTrue: true
 
-    run: (callSid, request, response) ->
+    run: (callSid, request, response) =>
 
         twiml = new Twilio.TwimlResponse()
         twiml.gather numDigits: 4, action: "/respondToVoiceCall?pluginHash=" + @hash, () ->
             twiml.say 'Please enter 4 digits:'
 
 
+        console.log 'what is ', callSid, request, response
         response.send twiml.toString()
         console.log "Save the digits here: #{callSid} : #{@hash}"
 

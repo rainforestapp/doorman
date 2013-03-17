@@ -30,6 +30,8 @@
 
   loadPlugin('actions', 'playMp3');
 
+  loadPlugin('actions', 'printToConsole');
+
   module.exports = config;
 
 }).call(this);

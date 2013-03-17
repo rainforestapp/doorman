@@ -19,19 +19,8 @@
     alwaysTrue.prototype.runOnTrue = true;
 
     alwaysTrue.prototype.run = function(callSid, request, response) {
-      var getcode,
-        _this = this;
-      getcode = this.getSourcePlugin('getCode');
-      return getcode.retrieveData(callSid, request, response, function(hasData) {
-        var returnObj;
-        if (hasData != null) {
-          returnObj = {};
-          returnObj.outcome = true;
-          return returnObj;
-        } else {
-
-        }
-      });
+      console.log('always true called!');
+      return true;
     };
 
     return alwaysTrue;

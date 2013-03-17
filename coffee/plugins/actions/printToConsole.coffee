@@ -1,8 +1,11 @@
-# Print console output
-printToConsole = {}
-printToConsole.runOnTrue = false
+Plugin = require '../plugin'
 
-printToConsole.run = (request, twiml) ->
-    console.log 'running print to console'
+class printToConsole extends Plugin
+
+    runOnTrue: true
+
+    run: (callSid, request, response, decision) ->
+        console.log 'hai! printinz'
+
 
 module.exports = printToConsole

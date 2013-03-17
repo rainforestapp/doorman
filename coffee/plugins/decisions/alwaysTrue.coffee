@@ -5,18 +5,13 @@ class alwaysTrue extends Plugin
     runOnTrue: true
 
     run: (callSid, request, response) =>
+
+        console.log 'always true called!'
+
         # this function will stop execution
-        getcode = @getSourcePlugin('getCode')
+        # getcode = @getSourcePlugin('getCode')
 
-        getcode.retrieveData callSid, request, response, (hasData) =>
-            if hasData?
-                # otherwise return stuff
-                returnObj = {}
-                returnObj.outcome = true
-                return returnObj
-
-            else
-                return
+        return true
 
 
 module.exports = alwaysTrue

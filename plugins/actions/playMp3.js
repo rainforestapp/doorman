@@ -18,16 +18,13 @@
 
     playMp3.prototype.runOnTrue = true;
 
-    playMp3.prototype.run = function(callSid, request, response) {
+    playMp3.prototype.run = function(callSid, request, response, decision) {
       var twiml;
-      console.log('playing mp3 ---- should not see');
       twiml = new Twilio.TwimlResponse();
       twiml.play("http://www.dialabc.com/i/cache/dtmfgen/wavpcm8.300/9.wav", {
         loop: 50
       });
-      console.log(twiml.toString());
-      response.send(twiml.toString());
-      return response.end();
+      return response.send(twiml.toString());
     };
 
     return playMp3;

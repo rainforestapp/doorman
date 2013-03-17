@@ -1,120 +1,114 @@
 # Define app and get require
-@express = require 'express'
-@twilio = require 'twilio'
-
+express = require 'express'
+twilio = require 'twilio'
 
 # Require config
 config = require './config'
 
 # Load Express
-app = @express()
+app = express()
 
 # main program body that depends on Redis connection
-main = =>
+main = ->
 
     # Middleware to parse the post properly (express newbs)
-    app.use @express.bodyParser()
-
-    # Setup first route
-    app.get '/', (request, response) ->
-        response.send 'Hello World'
-
-
-    getParameters = (callSid, pluginHash) ->
-        console.log  'getting stuff', callSid, pluginHash
-        global.redis.hget callSid, pluginHash, (err, response) ->
-            console.log 'got from redis:', callSid, pluginHash, response
+    app.use express.bodyParser()
 
 
     saveParameters = (callSid, request) ->
+
         # if there is a plugin hash present in the body
         if request.query.pluginHash?
-            # stringify body
-            obj = JSON.stringify(request.body)
 
-            # save params to redis
-            global.redis.hset callSid, request.query.pluginHash, obj , (err, response) =>
-                console.log 'set to redis:', callSid, request.query.pluginHash, response
-                getParameters(callSid, request.query.pluginHash)
+            hash = request.query.pluginHash
 
+            # save in global data object so other functions have access
+            global.data[callSid][hash] = {} unless global.data[callSid][hash]?
+            global.data[callSid][hash].data = request.body
 
-    runPlugin = (callSid, request, response) =>
+            # stringify entire plugin shit to save
+            obj = JSON.stringify({ hasRun: global.data[callSid][hash].hasRun?, data: request.body })
 
-        # run the decision plugin
-        decision = decisionPlugin.run(callSid, request, response)
-
-        # save that this plugin has been run
-        decisionPlugin.setHasRun()
-
+            # save params to redis because redis sux
+            global.redis.hset callSid, request.query.pluginHash, obj, (err, obj) ->
 
 
     # check plugins
-    checkDecisionPlugins = (callSid, request, response, i) =>
+    checkDecisionPlugins = (callSid, request, response) ->
 
-        i = 0 unless i
+        state = false
 
-        unless i is config.plugins.decisions.length
+        # iterate over all decision plugins
+        for decisionPlugin in global.config.plugins.decisions
 
-            console.log 'checking decision plugin', i
-            
-            decisionPlugin = config.plugins.decisions[i]
-                
-            decisionPlugin.getHasRun callSid, (callbackResponse) =>
-                if callbackResponse is false
-                    console.log 'callback false', i
-                    checkDecisionPlugins( callSid, request, response, i+1 ) 
-                else
-                    console.log 'callback response is true'
-                    # call actions with the relevant response
-                    actions(callSid, callbackResponse, request, response)
+            # execute if it has not already been run
+            unless global.data[callSid][decisionPlugin.hash]?.hasRun?
+                state = decisionPlugin.run(callSid, request, response)
 
-        else
-            console.log 'the end of the decisionz!'
-            actions(callSid, false, request, response)        
+                # save that it has been run
+                # ...locally
+                global.data[callSid][decisionPlugin.hash] = {} unless global.data[callSid][decisionPlugin.hash]?
+                global.data[callSid][decisionPlugin.hash].hasRun = true
+
+                # ...to redis
+                global.redis.hset callSid, decisionPlugin.hash, JSON.stringify(global.data[callSid][decisionPlugin.hash])
+
+                break if state is true
+
+        actions(callSid, request, response, state)
 
 
     # action
-    actions = (callSid, decision, request, response) =>
+    actions = (callSid, request, response, decision) =>
 
-    #    response.type "text/xml"
+        # iterate over all action plugins
+        for actionPlugin in global.config.plugins.actions
 
-        console.log "we're at actions!"
+            # execute if it has not already been run
+            unless global.data[callSid][actionPlugin.hash]?.hasRun?
+                actionPlugin.run(callSid, request, response, decision)
 
-        # loop over actions
-        for actionPlugin in config.plugins.actions
+                # save that it has been run
+                # ...locally
+                global.data[callSid][actionPlugin.hash] = {} unless global.data[callSid][actionPlugin.hash]?
+                global.data[callSid][actionPlugin.hash].hasRun = true
 
-            console.log actionPlugin
+                # ...to redis
+                global.redis.hset callSid, actionPlugin.hash, JSON.stringify(global.data[callSid][actionPlugin.hash])
 
-            # if decision.outcome is true and actionPlugin.runOnTrue is true
-            #     actionPlugin.run(callSid, request, response)
-
-            # else if decision.outcome is false and actionPlugin.runOnFalse is true
-            #     actionPlugin.run(callSid, request, response)
 
 
     # Listen to Twilio
-    app.post "/respondToVoiceCall", (request, response) =>
-
-        console.log ''
-        console.log '==============='
-        console.log 'START NEW THING'
-        console.log '==============='
+    app.post "/respondToVoiceCall", (request, response) ->
 
         # save call sid
         callSid = request.body.CallSid
 
-        # save the parameters sent in
-        saveParameters(callSid, request)
+        global.data[callSid] = {} unless global.data[callSid]?
 
-        # Validate that this request really came from Twilio...
-        if @twilio.validateExpressRequest(request,'20f65a9da68ec4630c9c43d19baef94e')
-            checkDecisionPlugins(callSid, request, response)
+        # get all plugin shit
+        global.redis.hgetall callSid, (err, obj) ->
 
-        else
-            response.send "you are not twilio. Buzz off."
+            if obj
+                # if theres anything in redis, iterate over all plugins and save it in globez
+                for key, val of obj
+                    global.data[callSid][key] = JSON.parse val
+    
+            # save the parameters sent in
+            saveParameters(callSid, request)
+
+            # Validate that this request really came from Twilio...
+            if twilio.validateExpressRequest(request,'20f65a9da68ec4630c9c43d19baef94e')
+                checkDecisionPlugins(callSid, request, response)
+
+            # else
+            #     response.send "you are not twilio. Buzz off."
 
 
-# Redis
+
+###############################
+### REDIZZZZZ
+###############################
 if process.env.REDISTOGO_URL
     rtg   = require("url").parse process.env.REDISTOGO_URL
     redis = require("redis").createClient rtg.port, rtg.hostname
@@ -122,15 +116,18 @@ if process.env.REDISTOGO_URL
 else
     redis = require("redis").createClient()
 
+# setup global data object
+global.data = {} unless global.data?
+
 # set redis to always be global
 global.redis = redis
 
 # error logging
-global.redis.on "error", (err) =>
+global.redis.on "error", (err) ->
     console.log "Error " + err
 
 # started helper
-global.redis.on "connect", =>
+global.redis.on "connect", ->
     global.redis.incr 'started'
     global.redis.get 'started', (err, response) ->
         unless err
