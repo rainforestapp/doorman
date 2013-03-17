@@ -1,16 +1,18 @@
 Twilio = require 'twilio'
+Plugin = require '../plugin'
 
-playMp3 = {}
-playMp3.runOnTrue = true
+class playMp3 extends Plugin
 
-playMp3.run = (request, response) =>
+    runOnTrue: true
 
-    console.log 'playing mp3'
+    run: (callSid, request, response) ->
 
-    twiml = new Twilio.TwimlResponse()
-    twiml.play "http://www.dialabc.com/i/cache/dtmfgen/wavpcm8.300/9.wav", loop: 50
-    console.log twiml.toString()
-    response.write twiml.toString()
+        console.log 'playing mp3'
+
+        twiml = new Twilio.TwimlResponse()
+        twiml.play "http://www.dialabc.com/i/cache/dtmfgen/wavpcm8.300/9.wav", loop: 50
+        console.log twiml.toString()
+        response.write twiml.toString()
 
 
 module.exports = playMp3

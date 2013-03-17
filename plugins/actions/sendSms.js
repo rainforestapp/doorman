@@ -6,9 +6,9 @@
 
   sendSms = {};
 
-  sendSms.runOnTrue = true;
+  sendSms.runOnTrue = false;
 
-  sendSms.runOnFalse = true;
+  sendSms.runOnFalse = false;
 
   sendSms.run = function(request, response) {
     var twiml;

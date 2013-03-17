@@ -4,7 +4,7 @@
 
   printToConsole = {};
 
-  printToConsole.runOnTrue = true;
+  printToConsole.runOnTrue = false;
 
   printToConsole.run = function(request, twiml) {
     return console.log('running print to console');

@@ -1,11 +1,15 @@
-# Print console output
-alwaysTrue = {}
+Plugin = require '../plugin'
 
-alwaysTrue.run = (request, twiml) ->
-    
-    returnObj = {}
-    returnObj.outcome = true
+class alwaysTrue extends Plugin
 
-    returnObj
+    runOnTrue: true
+
+    run: (callSid, request, response) ->
+
+        returnObj = {}
+        returnObj.outcome = true
+
+        returnObj
+
 
 module.exports = alwaysTrue

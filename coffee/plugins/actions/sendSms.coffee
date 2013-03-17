@@ -1,8 +1,8 @@
 Twilio = require 'twilio'
 
 sendSms = {}
-sendSms.runOnTrue = true
-sendSms.runOnFalse = true
+sendSms.runOnTrue = false
+sendSms.runOnFalse = false
 
 sendSms.run = (request, response) ->
 

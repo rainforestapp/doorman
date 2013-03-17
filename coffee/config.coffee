@@ -1,3 +1,5 @@
+Plugin = require './plugins/plugin' 
+
 config = {}
 
 config.plugins = {}
@@ -7,27 +9,26 @@ config.plugins.sources = []
 config.plugins.decisions = []
 config.plugins.actions = []
 
-# Module loader
 
-# Loop through the database
+loadPlugin = (type, name) ->
+    path = './plugins/' + type + '/' + name
 
-    # Read decision plugins from DB and pass to module loader
+    _klass = require(path)
+    plugin = new _klass(path)
 
-# loadModule 'decisions', './plugins/decisions/alwaysTrue'
-
-# loadModule: (type, path) ->
-
-#     config.plugins[type].push { name: hash(path), plugin: require(path) }
+    config.plugins[type].push plugin 
 
 
-# Decisions
-config.plugins.decisions.push require('./plugins/decisions/alwaysTrue')
-config.plugins.decisions.push require('./plugins/decisions/alwaysFalse')
+loadPlugin 'decisions', 'alwaysTrue'
+loadPlugin 'actions', 'playMp3'
 
-# Actions
-config.plugins.actions.push require('./plugins/actions/printToConsole')
-config.plugins.actions.push require('./plugins/actions/sendSms')
-config.plugins.actions.push require('./plugins/actions/playMp3')
 
+# loadPlugin 'sources', 'getCode'
+# loadPlugin 'decisions', 'alwaysTrue'
+# loadPlugin 'decisions', 'alwaysFalse'
+# loadPlugin 'actions', 'printToConsole'
+# loadPlugin 'actions', 'sendSms'
+# loadPlugin 'actions', 'playMp3'
+        
 # export the module
 module.exports = config
