@@ -18,17 +18,12 @@ app.use express.bodyParser()
 app.get '/', (request, response) ->
     response.send 'Hello World'
 
-# Listen to Twilio
-app.post "/respondToVoiceCall", (request, response) =>
+saveParameters = (request.body) =>
+    
+    if request.body.Digits?
+        # If digits exist, write to Redis database.
 
-    console.log request.body
-
-    # Validate that this request really came from Twilio...
-    if Twilio.validateExpressRequest(request,'20f65a9da68ec4630c9c43d19baef94e')
-        checkDecisionPlugins(request, response)
-
-    else
-        response.send "you are not twilio.  Buzz off."
+    
 
 
 # check plugins
@@ -65,5 +60,20 @@ actions = (decision, request, response) =>
     response.end()
 
 
+# Listen to Twilio
+app.post "/respondToVoiceCall", (request, response) =>
+
+    console.log request.body
+
+    saveParameters(request.body)
+
+    # Validate that this request really came from Twilio...
+    if Twilio.validateExpressRequest(request,'20f65a9da68ec4630c9c43d19baef94e')
+        checkDecisionPlugins(request, response)
+
+    else
+        response.send "you are not twilio.  Buzz off."
+
 # bind and listen for connection
 app.listen process.env.PORT || 5000
+
