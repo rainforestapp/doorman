@@ -55,13 +55,17 @@
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         actionPlugin = _ref[_i];
-        if (((_ref1 = global.data[callSid][actionPlugin.hash]) != null ? _ref1.hasRun : void 0) == null) {
-          actionPlugin.run(callSid, request, response, decision);
-          if (global.data[callSid][actionPlugin.hash] == null) {
-            global.data[callSid][actionPlugin.hash] = {};
+        if (actionPlugin.runOnTrue === true && decision === true || actionPlugin.runOnFalse === true && decision === false) {
+          if (((_ref1 = global.data[callSid][actionPlugin.hash]) != null ? _ref1.hasRun : void 0) == null) {
+            actionPlugin.run(callSid, request, response, decision);
+            if (global.data[callSid][actionPlugin.hash] == null) {
+              global.data[callSid][actionPlugin.hash] = {};
+            }
+            global.data[callSid][actionPlugin.hash].hasRun = true;
+            _results.push(global.redis.hset(callSid, actionPlugin.hash, JSON.stringify(global.data[callSid][actionPlugin.hash])));
+          } else {
+            _results.push(void 0);
           }
-          global.data[callSid][actionPlugin.hash].hasRun = true;
-          _results.push(global.redis.hset(callSid, actionPlugin.hash, JSON.stringify(global.data[callSid][actionPlugin.hash])));
         } else {
           _results.push(void 0);
         }
@@ -85,6 +89,8 @@
         saveParameters(callSid, request);
         if (twilio.validateExpressRequest(request, '20f65a9da68ec4630c9c43d19baef94e')) {
           return checkDecisionPlugins(callSid, request, response);
+        } else {
+          return response.send("you are not twilio. Buzz off.");
         }
       });
     });

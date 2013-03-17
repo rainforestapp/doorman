@@ -64,17 +64,19 @@ main = ->
         # iterate over all action plugins
         for actionPlugin in global.config.plugins.actions
 
-            # execute if it has not already been run
-            unless global.data[callSid][actionPlugin.hash]?.hasRun?
-                actionPlugin.run(callSid, request, response, decision)
+            if actionPlugin.runOnTrue is true and decision is true or actionPlugin.runOnFalse is true and decision is false
 
-                # save that it has been run
-                # ...locally
-                global.data[callSid][actionPlugin.hash] = {} unless global.data[callSid][actionPlugin.hash]?
-                global.data[callSid][actionPlugin.hash].hasRun = true
+                # execute if it has not already been run
+                unless global.data[callSid][actionPlugin.hash]?.hasRun?
+                    actionPlugin.run(callSid, request, response, decision)
 
-                # ...to redis
-                global.redis.hset callSid, actionPlugin.hash, JSON.stringify(global.data[callSid][actionPlugin.hash])
+                    # save that it has been run
+                    # ...locally
+                    global.data[callSid][actionPlugin.hash] = {} unless global.data[callSid][actionPlugin.hash]?
+                    global.data[callSid][actionPlugin.hash].hasRun = true
+
+                    # ...to redis
+                    global.redis.hset callSid, actionPlugin.hash, JSON.stringify(global.data[callSid][actionPlugin.hash])
 
 
 
@@ -83,6 +85,7 @@ main = ->
 
         # save call sid
         callSid = request.body.CallSid
+        # callSid = 'ladila'
 
         global.data[callSid] = {} unless global.data[callSid]?
 
@@ -101,8 +104,8 @@ main = ->
             if twilio.validateExpressRequest(request,'20f65a9da68ec4630c9c43d19baef94e')
                 checkDecisionPlugins(callSid, request, response)
 
-            # else
-            #     response.send "you are not twilio. Buzz off."
+            else
+                response.send "you are not twilio. Buzz off."
 
 
 
