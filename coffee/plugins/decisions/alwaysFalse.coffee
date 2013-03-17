@@ -9,9 +9,10 @@ class alwaysFalse extends Plugin
         console.log 'always false called!'
 
         # this function will stop execution
-        # getcode = @getSourcePlugin('getCode')
+        getcode = @getSourcePlugin('getCode')
+        digits = getcode.run(callSid, request, response, '1234')
 
-        return false
+        return digits is '1234'
 
 
 module.exports = alwaysFalse

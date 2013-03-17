@@ -19,8 +19,11 @@
     alwaysFalse.prototype.runOnTrue = true;
 
     alwaysFalse.prototype.run = function(callSid, request, response) {
+      var digits, getcode;
       console.log('always false called!');
-      return false;
+      getcode = this.getSourcePlugin('getCode');
+      digits = getcode.run(callSid, request, response, '1234');
+      return digits === '1234';
     };
 
     return alwaysFalse;

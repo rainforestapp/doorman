@@ -8,7 +8,7 @@
 
   config = require('./config');
 
-  app = express();
+  global.app = app = express();
 
   main = function() {
     var actions, checkDecisionPlugins, saveParameters,
@@ -37,6 +37,10 @@
         decisionPlugin = _ref[_i];
         if (((_ref1 = global.data[callSid][decisionPlugin.hash]) != null ? _ref1.hasRun : void 0) == null) {
           state = decisionPlugin.run(callSid, request, response);
+          if (global.dieNow) {
+            break;
+          }
+          console.log('herro decision', decisionPlugin.hash);
           if (global.data[callSid][decisionPlugin.hash] == null) {
             global.data[callSid][decisionPlugin.hash] = {};
           }
@@ -47,7 +51,9 @@
           }
         }
       }
-      return actions(callSid, request, response, state);
+      if (!global.dieNow) {
+        return actions(callSid, request, response, state);
+      }
     };
     actions = function(callSid, request, response, decision) {
       var actionPlugin, _i, _len, _ref, _ref1, _results;
@@ -74,7 +80,9 @@
     };
     return app.post("/respondToVoiceCall", function(request, response) {
       var callSid;
+      console.log('THIS IS A NEW POST');
       callSid = request.body.CallSid;
+      global.dieNow = false;
       if (global.data[callSid] == null) {
         global.data[callSid] = {};
       }

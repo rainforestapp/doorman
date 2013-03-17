@@ -8,10 +8,7 @@ class alwaysTrue extends Plugin
 
         console.log 'always true called!'
 
-        # this function will stop execution
-        # getcode = @getSourcePlugin('getCode')
-
-        return true
+        return false
 
 
 module.exports = alwaysTrue

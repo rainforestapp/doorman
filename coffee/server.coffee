@@ -6,7 +6,7 @@ twilio = require 'twilio'
 config = require './config'
 
 # Load Express
-app = express()
+global.app = app = express()
 
 # main program body that depends on Redis connection
 main = ->
@@ -45,6 +45,11 @@ main = ->
             unless global.data[callSid][decisionPlugin.hash]?.hasRun?
                 state = decisionPlugin.run(callSid, request, response)
 
+                if global.dieNow
+                    break
+
+                console.log 'herro decision', decisionPlugin.hash
+
                 # save that it has been run
                 # ...locally
                 global.data[callSid][decisionPlugin.hash] = {} unless global.data[callSid][decisionPlugin.hash]?
@@ -55,7 +60,7 @@ main = ->
 
                 break if state is true
 
-        actions(callSid, request, response, state)
+        actions(callSid, request, response, state) unless global.dieNow
 
 
     # action
@@ -83,10 +88,13 @@ main = ->
     # Listen to Twilio
     app.post "/respondToVoiceCall", (request, response) ->
 
+        console.log 'THIS IS A NEW POST'
+
         # save call sid
         callSid = request.body.CallSid
-        # callSid = 'ladila'
 
+        # helperz
+        global.dieNow = false
         global.data[callSid] = {} unless global.data[callSid]?
 
         # get all plugin shit

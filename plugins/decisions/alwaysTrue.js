@@ -20,7 +20,7 @@
 
     alwaysTrue.prototype.run = function(callSid, request, response) {
       console.log('always true called!');
-      return true;
+      return false;
     };
 
     return alwaysTrue;
