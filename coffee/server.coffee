@@ -1,12 +1,31 @@
 # Define app and get require
 express = require 'express'
-Twilio = require 'twilio'
+twilio = require 'twilio'
+
 
 # Require config
 config = require './config'
 
-# Instantiate a Twilio client object
-client = new Twilio.RestClient 'AC1ce0d8d7a79de22f4c27bed657e8e810', '20f65a9da68ec4630c9c43d19baef94e'
+
+# Redis
+if process.env.REDISTOGO_URL
+    rtg   = require("url").parse process.env.REDISTOGO_URL
+    redis = require("redis").createClient rtg.port, rtg.hostname
+    redis.auth rtg.auth.split(":")[1]
+else
+    redis = require("redis").createClient()
+
+
+
+redis.on "error", (err) =>
+    console.log "Error " + err
+
+redis.on "connect", =>
+  redis.incr 'started'
+  redis.get 'started', (err, response) ->
+    unless err
+      console.log 'Started', response, 'times'
+
 
 # Load Express
 app = express()
@@ -24,7 +43,7 @@ app.post "/respondToVoiceCall", (request, response) =>
     console.log request.body
 
     # Validate that this request really came from Twilio...
-    if Twilio.validateExpressRequest(request,'20f65a9da68ec4630c9c43d19baef94e')
+    if twilio.validateExpressRequest(request,'20f65a9da68ec4630c9c43d19baef94e')
         checkDecisionPlugins(request, response)
 
     else
@@ -55,14 +74,15 @@ actions = (decision, request, response) =>
     # loop over actions
     for actionPlugin in config.plugins.actions
 
-        if decision.outcome is true and actionPlugin.runOnTrue is true 
-            console.log Twilio
+        if decision.outcome is true and actionPlugin.runOnTrue is true
             actionPlugin.run(request,response)
 
         else if decision.outcome is false and actionPlugin.runOnFalse is true
             actionPlugin.run(request,response)
 
     response.end()
+
+
 
 
 # bind and listen for connection
