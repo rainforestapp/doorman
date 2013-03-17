@@ -1,6 +1,6 @@
 Plugin = require './plugins/plugin' 
 
-config = {}
+global.config = config = {}
 
 config.plugins = {}
 
@@ -9,7 +9,7 @@ config.plugins.sources = []
 config.plugins.decisions = []
 config.plugins.actions = []
 
-
+# helper function to load plugins
 loadPlugin = (type, name) ->
     path = './plugins/' + type + '/' + name
 
@@ -19,11 +19,12 @@ loadPlugin = (type, name) ->
     config.plugins[type].push plugin 
 
 
+loadPlugin 'sources', 'getCode'
+
 loadPlugin 'decisions', 'alwaysTrue'
 loadPlugin 'actions', 'playMp3'
 
 
-# loadPlugin 'sources', 'getCode'
 # loadPlugin 'decisions', 'alwaysTrue'
 # loadPlugin 'decisions', 'alwaysFalse'
 # loadPlugin 'actions', 'printToConsole'

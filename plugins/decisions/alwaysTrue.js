@@ -18,6 +18,7 @@
 
     alwaysTrue.prototype.run = function(callSid, request, response) {
       var returnObj;
+      console.log("alwaysTrue " + callSid);
       returnObj = {};
       returnObj.outcome = true;
       return returnObj;

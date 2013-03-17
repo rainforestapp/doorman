@@ -1,16 +1,15 @@
 Twilio = require 'twilio'
+Plugin = require '../plugin'
 
-getCode = {}
-getCode.runOnTrue = false
+class getCode extends Plugin
 
-getCode.run = (request, response) =>
+    runOnTrue: true
 
-    console.log 'getting code from dude at the door'
+    run: (callSid, request, response) ->
 
-    # twiml = new Twilio.TwimlResponse()
-    # twiml.play "http://www.dialabc.com/i/cache/dtmfgen/wavpcm8.300/9.wav", loop: 50
-    # console.log twiml.toString()
-    # response.write twiml.toString()
+        twiml = new Twilio.TwimlResponse()
+        twiml.play('Please dish four numbers at me bro').gather("/respondToVoiceCall?pluginHash=" + @hash)
+        response.send twiml.toString()
 
 
 module.exports = getCode

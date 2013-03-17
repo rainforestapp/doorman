@@ -6,6 +6,8 @@ class alwaysTrue extends Plugin
 
     run: (callSid, request, response) ->
 
+        console.log "alwaysTrue #{callSid}"
+
         returnObj = {}
         returnObj.outcome = true
 

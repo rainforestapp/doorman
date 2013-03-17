@@ -26,7 +26,7 @@
         loop: 50
       });
       console.log(twiml.toString());
-      return response.write(twiml.toString());
+      return response.send(twiml.toString());
     };
 
     return playMp3;

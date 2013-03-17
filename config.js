@@ -4,7 +4,7 @@
 
   Plugin = require('./plugins/plugin');
 
-  config = {};
+  global.config = config = {};
 
   config.plugins = {};
 
@@ -21,6 +21,8 @@
     plugin = new _klass(path);
     return config.plugins[type].push(plugin);
   };
+
+  loadPlugin('sources', 'getCode');
 
   loadPlugin('decisions', 'alwaysTrue');
 
