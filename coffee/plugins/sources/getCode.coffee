@@ -14,8 +14,10 @@ class getCode extends Plugin
         # otherwise request from twilio like a gangster
         else
 
+            url = String("/respondToVoiceCall?pluginHash=" + @hash)
+
             twiml = new Twilio.TwimlResponse()
-            twiml.gather numDigits: 4, action: "/respondToVoiceCall?pluginHash=" + @hash, () ->
+            twiml.gather numDigits: 4, action: url, () ->
                 twiml.say 'Please enter 4 digits:'
 
             response.send twiml.toString()

@@ -21,14 +21,15 @@
     getCode.prototype.runOnTrue = true;
 
     getCode.prototype.run = function(callSid, request, response, expected) {
-      var twiml, _ref, _ref1;
+      var twiml, url, _ref, _ref1;
       if ((((_ref = global.data[callSid][this.hash]) != null ? (_ref1 = _ref.data) != null ? _ref1.Digits : void 0 : void 0) != null) === true && global.data[callSid][this.hash].data.Digits === expected) {
         return global.data[callSid][this.hash].data.Digits;
       } else {
+        url = String("/respondToVoiceCall?pluginHash=" + this.hash);
         twiml = new Twilio.TwimlResponse();
         twiml.gather({
           numDigits: 4,
-          action: "/respondToVoiceCall?pluginHash=" + this.hash
+          action: url
         }, function() {
           return twiml.say('Please enter 4 digits:');
         });
