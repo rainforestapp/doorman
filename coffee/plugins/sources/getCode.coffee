@@ -8,8 +8,12 @@ class getCode extends Plugin
     run: (callSid, request, response) ->
 
         twiml = new Twilio.TwimlResponse()
-        twiml.play('Please dish four numbers at me bro').gather("/respondToVoiceCall?pluginHash=" + @hash)
+        twiml.gather numDigits: 4, action: "/respondToVoiceCall?pluginHash=" + @hash, () ->
+            twiml.say 'Please enter 4 digits:'
+
+
         response.send twiml.toString()
+        console.log "Save the digits here: #{callSid} : #{@hash}"
 
 
 module.exports = getCode

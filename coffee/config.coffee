@@ -20,12 +20,10 @@ loadPlugin = (type, name) ->
 
 
 loadPlugin 'sources', 'getCode'
-
 loadPlugin 'decisions', 'alwaysTrue'
 loadPlugin 'actions', 'playMp3'
 
 
-# loadPlugin 'decisions', 'alwaysTrue'
 # loadPlugin 'decisions', 'alwaysFalse'
 # loadPlugin 'actions', 'printToConsole'
 # loadPlugin 'actions', 'sendSms'

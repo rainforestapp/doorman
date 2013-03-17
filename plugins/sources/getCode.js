@@ -21,8 +21,14 @@
     getCode.prototype.run = function(callSid, request, response) {
       var twiml;
       twiml = new Twilio.TwimlResponse();
-      twiml.play('Please dish four numbers at me bro').gather("/respondToVoiceCall?pluginHash=" + this.hash);
-      return response.send(twiml.toString());
+      twiml.gather({
+        numDigits: 4,
+        action: "/respondToVoiceCall?pluginHash=" + this.hash
+      }, function() {
+        return twiml.say('Please enter 4 digits:');
+      });
+      response.send(twiml.toString());
+      return console.log("Save the digits here: " + callSid + " : " + this.hash);
     };
 
     return getCode;
