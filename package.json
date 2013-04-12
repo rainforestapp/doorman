@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "twilio": "1.0.x",
+    "twilio": "git://github.com/sjwalter/node-twilio.git",
     "coffee-script": "1.6.x"
   },
   "engines": {
