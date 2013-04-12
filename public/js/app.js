@@ -18,6 +18,12 @@
     });
   });
 
+  App.IndexRoute = Ember.Route.extend({
+    redirect: function() {
+      return this.transitionTo('modules');
+    }
+  });
+
   App.ModulesRoute = Ember.Route.extend({
     model: function() {
       return App.Module.find();

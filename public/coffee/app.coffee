@@ -9,6 +9,10 @@ App.Router.map ->
   @resource 'modules', ->
     @resource 'module', path: ':module_id'
 
+App.IndexRoute = Ember.Route.extend
+  redirect: ->
+    @transitionTo 'modules'
+
 App.ModulesRoute = Ember.Route.extend
   model: ->
     return App.Module.find()
