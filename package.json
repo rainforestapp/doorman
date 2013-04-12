@@ -7,7 +7,8 @@
     "twilio": "git://github.com/rainforestapp/node-twilio.git",
     "coffee-script": "1.6.x",
     "vows": "0.7.x",
-    "ember": "1.x"
+    "ember": "1.x",
+    "express": "3.x"
   },
   "engines": {
     "node": "0.10.0",
