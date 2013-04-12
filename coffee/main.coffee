@@ -6,11 +6,16 @@ app = require './express'
 
 sys = require 'sys'
 TwilioClient = require('twilio').Client
-client = new TwilioClient(ACCOUNT_SID, AUTH_TOKEN, HOSTNAME)
+Twiml = require('twilio').Twiml
+
+client = new TwilioClient(ACCOUNT_SID, AUTH_TOKEN, HOSTNAME, port: 6000)
+
+phone = client.getPhoneNumber('+14155240379')
 
 phone.setup ->
   # Oh, and what if we get an incoming call?
   phone.on 'incomingCall', (reqParams, res) ->
+    console.log('incoming')
     res.append(new Twiml.Say('Thanks for calling! I think you are beautiful!'))
     res.send()
 
