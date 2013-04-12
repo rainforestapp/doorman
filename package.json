@@ -7,11 +7,10 @@
     "express": "3.x",
     "twilio": "1.0.x",
     "coffee-script": "1.6.x",
-    "hiredis": "0.1.x",
-    "redis": "0.8.x"
+    "vows": "0.7.x"
   },
   "engines": {
     "node": "0.10.0",
     "npm":  "1.2.x"
-  }  
+  }
 }
