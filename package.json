@@ -5,10 +5,11 @@
   "private": true,
   "dependencies": {
     "twilio": "1.0.x",
-    "coffee-script": "1.6.x"
+    "coffee-script": "1.6.x",
+    "vows": "0.7.x"
   },
   "engines": {
     "node": "0.10.0",
     "npm":  "1.2.x"
-  }  
+  }
 }
