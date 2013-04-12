@@ -4894,8 +4894,8 @@ Ember.run.scheduleOnce = function(queue, target, method, args) {
 };
 
 /**
-  Schedules an item to run from within a separate run loop, after 
-  control has been returned to the system. This is equivalent to calling 
+  Schedules an item to run from within a separate run loop, after
+  control has been returned to the system. This is equivalent to calling
   `Ember.run.later` with a wait time of 1ms.
 
   ```javascript
@@ -4907,7 +4907,7 @@ Ember.run.scheduleOnce = function(queue, target, method, args) {
   Multiple operations scheduled with `Ember.run.next` will coalesce
   into the same later run loop, along with any other operations
   scheduled by `Ember.run.later` that expire right around the same
-  time that `Ember.run.next` operations will fire. 
+  time that `Ember.run.next` operations will fire.
 
   Note that there are often alternatives to using `Ember.run.next`.
   For instance, if you'd like to schedule an operation to happen
@@ -4933,13 +4933,13 @@ Ember.run.scheduleOnce = function(queue, target, method, args) {
 
   One benefit of the above approach compared to using `Ember.run.next` is
   that you will be able to perform DOM/CSS operations before unprocessed
-  elements are rendered to the screen, which may prevent flickering or 
+  elements are rendered to the screen, which may prevent flickering or
   other artifacts caused by delaying processing until after rendering.
 
-  The other major benefit to the above approach is that `Ember.run.next` 
-  introduces an element of non-determinism, which can make things much 
-  harder to test, due to its reliance on `setTimeout`; it's much harder 
-  to guarantee the order of scheduled operations when they are scheduled 
+  The other major benefit to the above approach is that `Ember.run.next`
+  introduces an element of non-determinism, which can make things much
+  harder to test, due to its reliance on `setTimeout`; it's much harder
+  to guarantee the order of scheduled operations when they are scheduled
   outside of the current run loop, i.e. with `Ember.run.next`.
 
   @method next
@@ -8553,7 +8553,7 @@ Ember.Array = Ember.Mixin.create(Ember.Enumerable, /** @scope Ember.Array.protot
     This returns the objects at the specified indexes, using `objectAt`.
 
     ```javascript
-    var arr = ['a', 'b', 'c', 'd'];
+    var arr = ['a', 'b', 'c', 'd'];
     arr.objectsAt([0, 1, 2]);  // ["a", "b", "c"]
     arr.objectsAt([2, 3, 4]);  // ["c", "d", undefined]
     ```
@@ -21665,7 +21665,7 @@ helpers = helpers || Ember.Handlebars.helpers; data = data || {};
   var buffer = '', stack1, hashTypes, escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
-  
+
   var buffer = '', hashTypes;
   data.buffer.push("<option value=\"\">");
   hashTypes = {};
@@ -21675,7 +21675,7 @@ function program1(depth0,data) {
   }
 
 function program3(depth0,data) {
-  
+
   var hashTypes;
   hashTypes = {'contentBinding': "STRING"};
   data.buffer.push(escapeExpression(helpers.view.call(depth0, "Ember.SelectOption", {hash:{
@@ -21690,7 +21690,7 @@ function program3(depth0,data) {
   stack1 = helpers.each.call(depth0, "view.content", {hash:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["ID"],hashTypes:hashTypes,data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   return buffer;
-  
+
 }),
   attributeBindings: ['multiple', 'disabled', 'tabindex', 'name'],
 
@@ -27753,4 +27753,3 @@ Ember
 */
 
 })();
-

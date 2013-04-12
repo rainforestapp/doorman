@@ -1,4 +1,9 @@
 /* Put your CSS here */
 html, body {
-    margin: 20px;
+  font-size: 16px;
+  margin: 2em;
+}
+
+.active {
+  font-weight: bold;
 }
