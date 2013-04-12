@@ -5,10 +5,12 @@
   "private": true,
   "dependencies": {
     "twilio": "git://github.com/sjwalter/node-twilio.git",
-    "coffee-script": "1.6.x"
+    "coffee-script": "1.6.x",
+    "vows": "0.7.x",
+    "ember": "1.x"    
   },
   "engines": {
     "node": "0.10.0",
     "npm":  "1.2.x"
-  }  
+  }
 }

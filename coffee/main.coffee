@@ -2,7 +2,9 @@ ACCOUNT_SID = "AC1ce0d8d7a79de22f4c27bed657e8e810"
 AUTH_TOKEN = "20f65a9da68ec4630c9c43d19baef94e"
 HOSTNAME = "204.14.154.40:6000"
 
-sys = require('sys')
+app = require './express'
+
+sys = require 'sys'
 TwilioClient = require('twilio').Client
 Twiml = require('twilio').Twiml
 
