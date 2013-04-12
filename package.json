@@ -4,11 +4,8 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "express": "3.x",
     "twilio": "1.0.x",
-    "coffee-script": "1.6.x",
-    "hiredis": "0.1.x",
-    "redis": "0.8.x"
+    "coffee-script": "1.6.x"
   },
   "engines": {
     "node": "0.10.0",
