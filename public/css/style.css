@@ -4,6 +4,14 @@ html, body {
   margin: 2em;
 }
 
+small {
+  font-weight: normal;
+}
+
+strong {
+  font-weight: bold;
+}
+
 .active {
   font-weight: bold;
 }

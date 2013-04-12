@@ -20,16 +20,36 @@
     {{outlet}}
   </script>
 
-  <script type="text/x-handlebars" data-template-name="log">
+  <script type="text/x-handlebars" id="log">
     Yolo here is some sort of log thing going on.
   </script>
 
-  <script type="text/x-handlebars" data-template-name="modules">
+  <script type="text/x-handlebars" id="modules">
     <ul>
       {{#each model}}
-      <li>{{title}} by {{author}}</li>
+      <li>{{#linkTo 'module' this}}{{title}}{{/linkTo}} by {{author}}</li>
       {{/each}}
     </ul>
+    <div class="article">{{outlet}}</div>
+  </script>
+
+  <script type="text/x-handlebars" id="module">
+    {{#if isEditing}}
+      {{partial 'module/edit'}}
+      <button {{action 'doneEditing'}}>Done</button>
+    {{else}}
+      <button {{action 'edit'}}>Edit</button>
+    {{/if}}
+    <h1>{{markdown title}}</h1>
+    <h2>by {{author}} <small>({{date publishedAt}})</small></h2>
+    <p>{{markdown intro}}</p>
+    <p>{{markdown extended}}</p>
+  </script>
+
+  <script type="text/x-handlebars" id="module/_edit">
+    <p>{{view Ember.TextField valueBinding='title'}}</p>
+    <p>{{view Ember.TextArea valueBinding='intro'}}</p>
+    <p>{{view Ember.TextArea valueBinding='extended'}}</p>
   </script>
 
   <script src="js/libs/jquery-1.9.1.js"></script>
