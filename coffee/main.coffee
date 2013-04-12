@@ -4,8 +4,9 @@ HOSTNAME = "204.14.154.40:6000"
 
 sys = require('sys')
 TwilioClient = require('twilio').Client
+Twiml = require('twilio').Twiml
 
-client = new TwilioClient(ACCOUNT_SID, AUTH_TOKEN, HOSTNAME)
+client = new TwilioClient(ACCOUNT_SID, AUTH_TOKEN, HOSTNAME, port: 6000)
 
 phone = client.getPhoneNumber('+14155240379')
 
