@@ -16,13 +16,21 @@ phone.setup ->
   # Oh, and what if we get an incoming call?
   phone.on 'incomingCall', (reqParams, res) ->
     console.log('incoming')
-    res.append(new Twiml.Say('Welcome to Rainforest! Please enter your PIN'))
+    res.append new Twiml.Say('Welcome to Rainforest! Please enter your PIN')
 
     gatherCode = new Twiml.Gather(null, {numDigits: 4})
     gatherCode.on 'gathered', (reqParams, res) ->
       console.log(arguments)
-      
       console.log('User pressed: ' + reqParams.Digits)
 
-    res.append(gatherCode)
+      if reqParams.Digits == '1234'
+        console.log('PIN is correct')
+        res.append new Twiml.Play("http://www.dialabc.com/i/cache/dtmfgen/wavpcm8.300/9.wav", loop: 50)
+      else
+        console.log('PIN is incorrect')
+      res.append new Twiml.Hangup()
+      res.send()
+        
+
+    res.append gatherCode
     res.send()
