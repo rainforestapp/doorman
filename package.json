@@ -4,10 +4,10 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "twilio": "git://github.com/sjwalter/node-twilio.git",
+    "twilio": "git://github.com/rainforestapp/node-twilio.git",
     "coffee-script": "1.6.x",
     "vows": "0.7.x",
-    "ember": "1.x"    
+    "ember": "1.x"
   },
   "engines": {
     "node": "0.10.0",
