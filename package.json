@@ -6,7 +6,8 @@
   "dependencies": {
     "twilio": "1.0.x",
     "coffee-script": "1.6.x",
-    "vows": "0.7.x"
+    "vows": "0.7.x",
+    "ember": "1.x"    
   },
   "engines": {
     "node": "0.10.0",
